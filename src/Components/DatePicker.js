@@ -16,6 +16,8 @@ class DatePicker extends Component {
         var birthDate = new Date(this.state.dateOfBirth);
         var ageDifMs = Date.now() - birthDate.getTime();
         var ageDate = new Date(ageDifMs); //millieseconds from epoch
+        if (ageDate < 0 || (ageDate === 0 && today.getDate() < dateOfBirth.getDate())) 
+            age--;
         this.setState({age: Math.abs(ageDate.getUTCFullYear() - 1970)})
     }
 

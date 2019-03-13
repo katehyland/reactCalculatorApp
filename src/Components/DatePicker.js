@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import moment from 'moment';
 
 class DatePicker extends Component {
     state = {
@@ -13,13 +14,14 @@ class DatePicker extends Component {
     //our dateOfBirth change handler is taking event as an argument and setting the state of dateOfBirth to the value of the targeted element ()
     calculateAge = (event) => {
         event.preventDefault();
-        var birthDate = new Date(this.state.dateOfBirth);
-        var ageDifMs = Date.now() - birthDate.getTime();
-        var ageDate = new Date(ageDifMs); //millieseconds from epoch
-        if (ageDate < 0 || (ageDate === 0 && today.getDate() < dateOfBirth.getDate())) 
-            age--;
-        this.setState({age: Math.abs(ageDate.getUTCFullYear() - 1970)})
-    }
+        const now = moment();
+        const birthDay = moment(this.state.dateOfBirth);
+        if (now < birthDay) {
+            alert('Birth date must be less than todays date');
+            return null;
+        }
+        this.setState({age: now.diff(birthDay, "years")});
+    };
 
  
     render() {
@@ -28,7 +30,7 @@ class DatePicker extends Component {
                 <p className="headerText"> Enter your date of birth</p>
                 <form onSubmit={this.calculateAge}>
                 <input type="date" id="datePicker" onChange={this.dateOfBirthChangedHandler} required={true} />
-                <button type="submit" id="calculateButton" >Calculate Age</button>
+                <button type="submit" id="calculateButton"> Calculate Age </button>
                 <p className="ageText"> {this.state.age} </p>
                 </form>
             </div>
